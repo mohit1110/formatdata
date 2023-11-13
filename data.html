@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Display</title>
+    <style>
+  
+      button {
+        border: 2px solid green;
+        height: fit-content;
+        padding: 5px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px;
+        user-select: n;
+      }
+      button:hover {
+        background-color: green;
+        color: white;
+      }
+      div {
+        margin-bottom: 10px;
+      }
+      .data {
+        display: inline-block;
+        width: 80vw;
+        height: fit-content;
+      }
+      table,tr,td,th{
+        border: 2px solid black;
+        border-collapse: collapse;
+        padding: 5px 10px;
+      }
+      table{
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      Data:
+      <textarea name="" id="jdata" cols="100" rows="10"></textarea><br />
+      <button onclick="datadisplay()">Display Data</button>
+    </div>
+      <table>
+        <thead>
+         <tr>
+          <th>Name</th>
+          <th>Data</th>
+          <th>Copy</th>
+         </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Company Name</th>
+            <td id="cname"></td>
+            <td id="cnamecopybtn"></td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td id="cdescription"></td>
+            <td id="cdescriptioncopybtn"></td>
+          </tr>
+          <tr>
+            <th>Address</th>
+            <td id="caddress"></td>
+            <td id="caddresscopybtn"></td>
+          </tr>
+          <tr>
+            <th>Contact</th>
+            <td id="ccontact"></td>
+            <td id="ccontactcopybtn"></td>
+          </tr>
+          <tr>
+            <th>Time</th>
+            <td id="ctime"></td>
+            <td id="ctimecopybtn"></td>
+          </tr>
+          <tr>
+            <th rowspan="4">Images</th>
+            <td id="cimage1">
+            </td>
+            <td id="cimage1copybtn"></td>
+          </tr>
+          <tr>
+            <td id="cimage2"></td>
+            <td id="cimage2copybtn"></td>
+          </tr>
+          <tr>
+            <td id="cimage3"></td>
+            <td id="cimage3copybtn"></td>
+          </tr>
+          <tr>
+            <td id="cimage4"></td>
+            <td id="cimage4copybtn"></td>
+          </tr>
+          <tr>
+            <th>Store Front Image</th>
+            <td id="cfrontimage"></td>
+            <td id="cfrontimagecopybtn"></td>
+          </tr>
+          <tr>
+            <th>YouTube Link</th>
+            <td id="cyoutube"></td>
+            <td id="cyoutubecopybtn"></td>
+          </tr>
+          <tr>
+            <th>Tagline</th>
+            <td id="ctagline"></td>
+            <td id="ctaglinecopybtn"></td>
+          </tr>
+
+        </tbody>
+      </table>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="4" id="">Products</th>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <th>Copy</th>
+            <th>Image Url</th>
+            <th>Image</th>
+          </tr>
+        </thead>
+        <tbody id="productbody">         
+        </tbody>
+      </table>
+
+     
+    </div>
+
+    <script>
+      function datadisplay() {
+        data = jdata.value;
+        if (data != "") {
+          data = JSON.parse(data);
+
+          cname.innerHTML = dataformat(data.Data[0].MSCompanyName);
+          cnamecopybtn.innerHTML=datacopy(data.Data[0].MSCompanyName);
+          
+          cdescription.innerHTML = dataformat(data.Data[0].MSProfDescription);
+          cdescriptioncopybtn.innerHTML = datacopy(data.Data[0].MSProfDescription);
+          
+          caddress.innerHTML=dataformat(data.Data[0].MSBusinessAddress);
+          caddresscopybtn.innerHTML=datacopy(data.Data[0].MSBusinessAddress);
+
+          ccontact.innerHTML=dataformat(data.Data[0].MSBusinessPhoneNumber);
+          ccontactcopybtn.innerHTML=datacopy(data.Data[0].MSBusinessPhoneNumber);
+
+          ctime.innerHTML=dataformat(data.Data[0].MSBusinessTiming);
+          ctimecopybtn.innerHTML=datacopy(data.Data[0].MSBusinessTiming);
+
+          imageurl=data.Data[0].MSBusinessImagesUrls;
+          len=imageurl.length;
+          for(i=0;i<4;i++){
+            cimage=document.getElementById("cimage"+(i+1));
+            cimagecopybtn=document.getElementById("cimage"+(i+1)+"copybtn");
+            cimage.innerHTML=dataurl(imageurl[i]);
+            cimagecopybtn.innerHTML=dataimagepreview(imageurl[i]);
+          }
+
+          cfrontimage.innerHTML=dataurl(data.Data[0].MerchantScriptData["StorefrontImage"]);
+          cfrontimagecopybtn.innerHTML=dataimagepreview(data.Data[0].MerchantScriptData["StorefrontImage"]);
+        
+          cyoutube.innerHTML=dataurl(data.Data[0].MSYouTubeLink);
+          cyoutubecopybtn.innerHTML=datacopy(data.Data[0].MSYouTubeLink);
+
+          ctagline.innerHTML=dataformat(data.Data[0].MSBusinessTagline);
+          ctaglinecopybtn.innerHTML=datacopy(data.Data[0].MSBusinessTagline);
+
+          productbody.innerHTML="";
+          products=data.Data[0].ProductData;                    
+          len=products.length;
+          if(len>0){           
+            for(i=0;i<len;i++){
+            productname=dataformat(products[i].MSProductName);
+            productcopyname=datacopy(products[i].MSProductName);
+            productimageurl=dataurl(products[i].MSProductLogoUrl);
+            productimage=dataimagepreview(products[i].MSProductLogoUrl)
+      
+            productbody.innerHTML+=` 
+              <tr>
+                <td>`+productname+`</td>
+                <td>`+productcopyname+`</td>
+                <td>`+productimageurl+`</td>
+                <td>`+productimage+`</td>
+              </tr>`;     
+            }
+          }
+
+          menu=data.Data[0].MenuDataList;                    
+          len=menu.length;
+          if(len>0){
+            productbody.innerHTML+=` <tr>
+                <th colspan="4">Menu</th>
+              </tr>`;
+            for(i=0;i<len;i++){
+            menuname=dataformat(menu[i].MSMenuProductName);
+            menucopyname=datacopy(menu[i].MSMenuProductName);
+            menuimageurl=dataurl(menu[i].MSMenuProductImage);
+            menuimage=dataimagepreview(menu[i].MSMenuProductImage);
+      
+            productbody.innerHTML+=` 
+              <tr>
+                <td>`+menuname+`</td>
+                <td>`+menucopyname+`</td>
+                <td>`+menuimageurl+`</td>
+                <td>`+menuimage+`</td>
+              </tr>`;     
+            }            
+          }
+                  
+        }
+      }
+      function dataformat(data) {
+        data = data.replaceAll("\n", "");
+        return data;
+      }
+      function datacopy(data) {
+        data = data.replaceAll("\n", "");
+        data ="<button onclick=\"navigator.clipboard.writeText(`"+data+"`)\">Copy</button>";
+        return data;
+      }
+      function dataurl(data) {
+        data ="<a href="+data+" target=\"_blank\">"+data+"</a>";
+        return data;
+      }
+      function dataimagepreview(data) {
+        data ="<img src=\""+data+"\" alt=\"img\" height=\"80\" width=\"80\">";
+        return data;
+      }
+    </script>
+  </body>
+</html>
