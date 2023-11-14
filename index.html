@@ -111,6 +111,11 @@
             <td id="ctagline"></td>
             <td id="ctaglinecopybtn"></td>
           </tr>
+           <tr>
+            <th>Google Review Link</th>
+            <td id="creviewurl"></td>
+            <td id="creviewurlcopybtn"></td>
+          </tr>
 
         </tbody>
       </table>
@@ -171,6 +176,9 @@
 
           ctagline.innerHTML=dataformat(data.Data[0].MSBusinessTagline);
           ctaglinecopybtn.innerHTML=datacopy(data.Data[0].MSBusinessTagline);
+
+          creviewurl.innerHTML=dataformat(data.Data[0].MerchantGoogleBusinessReviewUri);
+          creviewurlcopybtn.innerHTML=datacopy(data.Data[0].MerchantGoogleBusinessReviewUri);
 
           productbody.innerHTML="";
           products=data.Data[0].ProductData;                    
