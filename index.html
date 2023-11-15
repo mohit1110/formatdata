@@ -221,6 +221,38 @@
               </tr>`;     
             }            
           }
+           service=data.Data[0].ServiceData;                          
+          len=service.length;
+          if(len>0){
+            
+            productbody.innerHTML+=` <tr>
+                <th colspan="4">Services Data</th>                
+              </tr>
+              <tr>                
+                <th colspan="4">`+service[0].MSPServiceName+`</th>                
+              </tr>
+              <tr>
+                <th colspan="2">Service Name</th>                
+                <th colspan="2">Service Value</th>                
+              </tr>`;
+              servicedata=service[0].MSChildDataList;
+            len=servicedata.length;            
+            for(i=0;i<len;i++){
+            servicename=dataformat(servicedata[i].MSCServiceName);
+            servicecopyname=datacopy(servicedata[i].MSCServiceName);
+            servicevalue=dataformat(servicedata[i].MSCServiceValue);
+            servicecopyvalue=datacopy(servicedata[i].MSCServiceValue);
+      
+            productbody.innerHTML+=` 
+              <tr>
+                <td>`+servicename+`</td>
+                <td>`+servicecopyname+`</td>
+                <td>`+servicevalue+`</td>
+                <td>`+servicecopyvalue+`</td>
+              </tr>`;     
+            } 
+                 
+          }
                   
         }
       }
